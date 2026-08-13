@@ -438,7 +438,7 @@ function loadfile_compat(path)
 end
 
 function menu_json(menu_items, page)
-    local title = (search_query or (dir_menu and "Directories" or "History")) .. ""
+    local title = (search_query or (dir_menu and "Directories" or "History")) .. " (memo)"
     if options.pagination or page ~= 1 then
         title = title .. " - Page " .. page
     end

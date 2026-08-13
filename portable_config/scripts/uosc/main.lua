@@ -1,5 +1,5 @@
 --[[ uosc | https://github.com/tomasklaen/uosc ]]
-local uosc_version = '5.12.0'
+local uosc_version = '5.13.0'
 
 mp.commandv('script-message', 'uosc-version', uosc_version)
 
@@ -28,6 +28,7 @@ defaults = {
 	timeline_step = '5',
 	timeline_cache = true,
 	timeline_heatmap = 'overlay',
+	timeline_mbtn_right = '',
 
 	controls =
 	'menu,gap,<video,audio>subtitles,<has_many_audio>audio,<has_many_video>video,<has_many_edition>editions,<stream>stream-quality,gap,space,<video,audio>speed,space,shuffle,loop-playlist,loop-file,gap,prev,items,next,gap,fullscreen',
@@ -142,6 +143,7 @@ local config_defaults = {
 		foreground_text = serialize_rgba('000000').color,
 		background = serialize_rgba('000000').color,
 		background_text = serialize_rgba('ffffff').color,
+		window_border = serialize_rgba('000000').color,
 		curtain = serialize_rgba('111111').color,
 		success = serialize_rgba('a5e075').color,
 		error = serialize_rgba('ff616e').color,
@@ -955,7 +957,10 @@ bind_command('show-in-directory', function()
 end)
 bind_command('stream-quality', open_stream_quality_menu)
 bind_command('open-file', open_open_file_menu)
-bind_command('shuffle', function() set_state('shuffle', not state.shuffle) end)
+bind_command('shuffle', function()
+	set_state('shuffle', not state.shuffle)
+	mp.osd_message(state.shuffle and t('Shuffle ON') or t('Shuffle OFF'))
+end)
 bind_command('items', function()
 	if state.has_playlist then
 		mp.command('script-binding uosc/playlist')

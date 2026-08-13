@@ -1,7 +1,7 @@
 # Personal mpv Configuration for Windows
 
-<p align="center"><img width=100% src="https://github.com/user-attachments/assets/7d6b7cfd-41c7-4617-b573-933b4b3bd564" alt="mpv screenshot"></p>
-<p align="center"><img width=100% src="https://github.com/user-attachments/assets/bfd85e57-f244-4de4-8bf9-750723c51568" alt="mpv screenshot"></p>
+<p align="center"><img width=100% src="https://github.com/user-attachments/assets/9d2c7f87-707a-41a3-90d1-153580a704f4" alt="mpv screenshot"></p>
+<p align="center"><img width=100% src="https://github.com/user-attachments/assets/97fa1eb3-f81f-4aca-9bc8-97898fe733d5" alt="mpv screenshot"></p>
 
 ## Overview
 Just my personal config files for use in [mpv](https://mpv.io/), a free, open-source, & cross-platform media player, with a focus on quality and a practical yet comfortable viewing experience. Contains tuned profiles (for up/downscaling, live action, anime & HDR content), custom key bindings, a GUI, as well as multiple scripts, shaders & filters, all serving different functions. Suitable for both high and low-end pc's (with some tweaks).
@@ -16,6 +16,7 @@ Before installing, please take your time to read this whole README as common iss
 - [InputEvent](https://github.com/natural-harmonia-gropius/input-event) - Enhanced input.conf with better, conflict-free, low-latency event mechanisms.
 - [autodeint](https://github.com/mpv-player/mpv/blob/master/TOOLS/lua/autodeint.lua) - Automatically deinterlace the video by using lavfi's idet filter to detect interlaced content.
 - [autoload](https://github.com/mpv-player/mpv/blob/master/TOOLS/lua/autoload.lua) - Automatically load playlist entries before and after the currently playing file, by scanning the directory.
+- [afilter](https://github.com/he2a/mpv-scripts) - Lua script for easy access to certain audio filters in mpv, including a Dynamic Range Compressor and Speech Normaliser.
 - - - 
 - [nnedi3 and ravu](https://github.com/bjin/mpv-prescalers) - User shaders for prescaling.
 - [FSRCNN](https://github.com/igv/FSRCNN-TensorFlow/releases) - Prescaler based on layered convolutional networks.
@@ -36,9 +37,9 @@ Before installing, please take your time to read this whole README as common iss
 * Download the latest 64bit (or 64bit-v3 for newer CPUs) mpv Windows build by shinchiro [here](https://mpv.io/installation/) or directly from [here](https://github.com/shinchiro/mpv-winbuild-cmake/releases) and extract its contents into a folder of your choice (mine is called mpv). This is now your mpv folder and can be placed wherever you want. 
 * Run `mpv-install.bat`, which is located in the `installer` folder (see File Structure section), with administrator privileges by right-clicking and selecting run as administrator, after it's done, you'll get a prompt to open Control Panel and set mpv as the default player.
 * Download and extract the `portable_config` folder from this repo to the mpv folder you just made. 
-* Add file paths, to 2 files in the [script-opts](https://github.com/Zabooby/mpv-config/tree/main/portable_config/script-opts) folder (detailed in the File Structure section), to match your preferences. 
+* Add file paths, to the files in the [script-opts](https://github.com/Zabooby/mpv-config/tree/main/portable_config/script-opts) folder (detailed in the File Structure section), to match your preferences. 
 * **Adjust relevant settings in [mpv.conf](https://github.com/Zabooby/mpv-config/blob/main/portable_config/mpv.conf) & [profiles.conf](https://github.com/Zabooby/mpv-config/blob/main/portable_config/profiles.conf) to fit your system and preferences, use the [manual](https://mpv.io/manual/master/) to find out what different options do or open an issue if you need any help.**
-* For mpv updates, right click updater.bat and run as administrator, then follow the instructions. There will be an option to install yt-dlp to be able to stream YouTube videos and any other websites supported by [yt-dlp,](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) if you want. Once the initial run of updater.bat has completed a settings.xml file will be generated to save your preferences. 
+* For mpv updates, right click updater.bat and run as administrator, then follow the instructions. There will be an option to install yt-dlp (and ffmpeg) to be able to stream YouTube videos and any other websites supported by [yt-dlp,](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) if you want. Once the initial run of updater.bat has completed a settings.xml file will be generated to save your preferences. 
 * You're all set up. Go watch some videos!
 
 After following the steps above, your mpv folder should have the following structure:
@@ -70,6 +71,9 @@ mpv
 |   |   └── uosc_textures.ttf
 │   │
 │   ├── script-opts                       # Contains configuration files for scripts
+|   |   ├── sofa
+│   │       └── HRIR_CIRC360.sofa
+|   |   ├── afilter.conf
 |   |   ├── console.conf
 |   |   ├── evafast.conf 
 |   |   ├── memo.conf
@@ -106,12 +110,15 @@ mpv
 |   |           ├── de.lua
 |   |           ├── es.lua
 |   |           ├── fr.json
+|   |           ├── it.json
 |   |           ├── pl.json
+|   |           ├── pt.json
 |   |           ├── ro.json
 |   |           ├── ru.json
 |   |           ├── tr.json
 |   |           ├── uk.json
-|   |           └── zh-hans.json
+|   |           ├── zh-hans.json
+|   |           └── zh-HK.json
 |   |       ├── lib
 |   |           ├── ass.lua
 |   |           ├── buttons.lua
@@ -125,6 +132,7 @@ mpv
 |   |           └── utils.lua
 |   |       └── main.lua
 │   │
+│   │   ├── afilter.lua
 │   │   ├── autodeint.lua
 │   │   ├── autoload.lua 
 │   │   ├── evafast.lua                   # Activated by holding right arrow key
@@ -154,8 +162,11 @@ mpv
 |   └── profiles.conf                     
 |   
 ├── d3dcompiler_43.dll
+├── ffmpeg.exe
 ├── mpv.com
 ├── mpv.exe                               # The mpv executable file
+├── mpv-register.bat                      # Register mpv to all users
+├── mpv-unregister.bat
 ├── settings.xml                          # Created after initial run of updater.bat
 ├── updater.bat                           # Run with administrator privileges to update mpv
 └── yt-dlp.exe                            
